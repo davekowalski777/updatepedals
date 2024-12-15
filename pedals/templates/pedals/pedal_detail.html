@@ -1,0 +1,373 @@
+{% extends 'base.html' %}
+
+{% block meta_description %}
+<meta name="description" content="{{ pedal.meta_description }}">
+{% endblock %}
+
+{% block title %} - {{ pedal.get_formatted_title }}{% endblock %}
+
+{% block extra_css %}
+<style>
+.star-rating-input {
+    font-size: 24px;
+    cursor: pointer;
+}
+.star-rating-input .star {
+    color: #ddd;
+    transition: color 0.2s;
+}
+.star-rating-input .star.active {
+    color: #ffd700;
+}
+.star-rating-input .star:hover {
+    color: #ffed4a;
+}
+
+/* Comment form styles */
+#comment-form textarea {
+    min-height: 100px;
+}
+.invalid-feedback {
+    display: block;
+}
+.comment {
+    transition: background-color 0.3s;
+}
+.comment:hover {
+    background-color: #f8f9fa !important;
+}
+
+/* Rating gauge styles */
+.rating-gauge {
+    width: 200px;
+    height: 200px;
+    margin: 20px auto;
+    position: relative;
+}
+
+.rating-circle {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: #f0f0f0;
+    position: relative;
+    overflow: hidden;
+}
+
+.rating-fill {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    border-radius: 50%;
+    clip-path: polygon(50% 50%, 50% 0, 100% 0, 100% 100%, 0 100%, 0 0, 50% 0);
+    transform-origin: 50% 50%;
+    transition: transform 1s ease-out, background-color 1s ease-out;
+}
+
+.rating-fill.high {
+    background: #28a745;  /* Green for 8-10 */
+}
+
+.rating-fill.medium {
+    background: #ffc107;  /* Yellow for 5-7 */
+}
+
+.rating-fill.low {
+    background: #dc3545;  /* Red for 1-4 */
+}
+
+.rating-center {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    bottom: 20px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.rating-value {
+    font-size: 32px;
+    font-weight: bold;
+    color: #333;
+    line-height: 1;
+    margin-bottom: 5px;
+}
+
+.rating-label {
+    font-size: 14px;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'pedals:pedal_list' %}">Pedals</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ pedal.name }}</li>
+        </ol>
+    </nav>
+
+    <h1 class="mb-4">{{ pedal.get_formatted_title }}</h1>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card shadow-sm mb-4">
+                {% if pedal.image_url %}
+                    <img src="{{ pedal.image_url }}" class="card-img-top p-4" alt="{{ pedal.name }}" style="object-fit: contain; height: 400px;">
+                {% else %}
+                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 400px;">
+                        <i class="fas fa-guitar fa-5x text-secondary"></i>
+                    </div>
+                {% endif %}
+            </div>
+            <h2 class="mb-3">{{ pedal.manufacturer.name }} {{ pedal.name }}</h2>
+            
+            {% if pedal.affiliate_link %}
+                <a href="{{ pedal.affiliate_link }}" class="btn btn-primary btn-lg w-100 mb-4" target="_blank">
+                    <i class="fas fa-shopping-cart"></i> Buy Now
+                </a>
+            {% endif %}
+
+            <!-- YouTube Demo Button -->
+            <div class="mb-4">
+                <a href="{{ pedal.get_youtube_search_url }}" target="_blank" class="btn btn-danger btn-lg w-100">
+                    <i class="fab fa-youtube me-2"></i>Watch Demo (YouTube)
+                </a>
+            </div>
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h4 class="card-title mb-3">
+                        <i class="fas fa-info-circle text-primary"></i> Pedal Information
+                    </h4>
+                    <div class="d-flex flex-column gap-2">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-guitar text-primary me-2"></i>
+                            <div>
+                                <strong>Type:</strong> {{ pedal.pedal_type.name }}
+                            </div>
+                        </div>
+                        {% if pedal.price %}
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-tag text-success me-2"></i>
+                            <div>
+                                <strong>Price:</strong> ${{ pedal.price }}
+                            </div>
+                        </div>
+                        {% endif %}
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-industry text-secondary me-2"></i>
+                            <div>
+                                <strong>Manufacturer:</strong> {{ pedal.manufacturer.name }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <!-- Rating Gauge -->
+            {% if pedal.my_rating %}
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <div class="rating-gauge">
+                        <div class="rating-circle">
+                            <div class="rating-fill" id="ratingFill"></div>
+                            <div class="rating-center">
+                                <div class="rating-value">{{ pedal.my_rating|floatformat:"0" }}/10</div>
+                                <div class="rating-label">Our Rating</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Reviews Section -->
+            <div>
+                {% include 'pedals/includes/comments.html' %}
+            </div>
+
+            <!-- What Makes It Good -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <i class="fas fa-thumbs-up text-success"></i> {{ pedal.heading_what_makes_it_good|default:"What Makes It Good" }}
+                    </h4>
+                    <div class="card-text">{{ pedal.what_makes_it_good|linebreaks }}</div>
+                </div>
+            </div>
+
+            <!-- Best For -->
+            {% if pedal.best_for %}
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <i class="fas fa-bullseye text-danger"></i> {{ pedal.heading_best_for|default:"Best For" }}
+                    </h4>
+                    <div class="card-text">{{ pedal.best_for|linebreaks }}</div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- My Experience -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <i class="fas fa-comment text-info"></i> {{ pedal.heading_my_experience|default:"My Experience" }}
+                    </h4>
+                    <div class="card-text">{{ pedal.my_experience|linebreaks }}</div>
+                </div>
+            </div>
+
+            <!-- Specifications -->
+            {% if pedal.specifications %}
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <i class="fas fa-cogs text-secondary"></i> {{ pedal.heading_specifications|default:"Specifications" }}
+                    </h4>
+                    <div class="card-text">{{ pedal.specifications|linebreaks }}</div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- About the Brand -->
+            {% if pedal.manufacturer.about %}
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <i class="fas fa-building text-secondary"></i> About {{ pedal.manufacturer.name }}
+                    </h4>
+                    <div class="card-text">{{ pedal.manufacturer.about|linebreaks }}</div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Author Bio -->
+            {% if pedal.author %}
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h4 class="card-title mb-3">
+                        <i class="fas fa-user text-primary"></i> About the Reviewer
+                    </h4>
+                    <div class="d-flex align-items-center mb-3">
+                        {% if pedal.author.profile_image %}
+                            <img src="{{ pedal.author.profile_image }}" alt="{{ pedal.author.name }}" class="rounded-circle me-3" style="width: 64px; height: 64px; object-fit: cover;">
+                        {% else %}
+                            <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-3" style="width: 64px; height: 64px;">
+                                <i class="fas fa-user fa-2x"></i>
+                            </div>
+                        {% endif %}
+                        <div>
+                            <h5 class="card-title mb-1">{{ pedal.author.name }}</h5>
+                            <p class="card-text text-muted mb-0">{{ pedal.author.years_of_experience }} Years of Guitar Experience</p>
+                        </div>
+                    </div>
+                    <p class="card-text">{{ pedal.author.bio }}</p>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if related_pedals %}
+    <div class="row mt-5">
+        <div class="col-12">
+            <h3 class="mb-4">You Might Also Like</h3>
+            <div class="row">
+                <div class="col-12 mb-4">
+                    <h5 class="text-muted">More from {{ pedal.manufacturer.name }}</h5>
+                </div>
+                {% for related_pedal in related_pedals|slice:":2" %}
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        {% if related_pedal.image_url %}
+                            <img src="{{ related_pedal.image_url }}" class="card-img-top" alt="{{ related_pedal.name }}" style="height: 200px; object-fit: contain; padding: 1rem;">
+                        {% else %}
+                            <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                                <i class="fas fa-guitar fa-3x text-secondary"></i>
+                            </div>
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ related_pedal.name }}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">{{ related_pedal.manufacturer.name }}</h6>
+                            <p class="card-text">
+                                <span class="badge bg-primary">{{ related_pedal.pedal_type.name }}</span>
+                            </p>
+                            <div class="d-grid">
+                                <a href="{% url 'pedals:pedal_detail' related_pedal.slug %}" class="btn btn-outline-primary">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                
+                <div class="col-12 mb-4 mt-4">
+                    <h5 class="text-muted">Similar {{ pedal.pedal_type.name }} Pedals</h5>
+                </div>
+                {% for related_pedal in related_pedals|slice:"2:" %}
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        {% if related_pedal.image_url %}
+                            <img src="{{ related_pedal.image_url }}" class="card-img-top" alt="{{ related_pedal.name }}" style="height: 200px; object-fit: contain; padding: 1rem;">
+                        {% else %}
+                            <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                                <i class="fas fa-guitar fa-3x text-secondary"></i>
+                            </div>
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ related_pedal.name }}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">{{ related_pedal.manufacturer.name }}</h6>
+                            <p class="card-text">
+                                <span class="badge bg-primary">{{ related_pedal.pedal_type.name }}</span>
+                            </p>
+                            <div class="d-grid">
+                                <a href="{% url 'pedals:pedal_detail' related_pedal.slug %}" class="btn btn-outline-primary">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const ratingFill = document.getElementById('ratingFill');
+    if (ratingFill) {
+        const rating = {{ pedal.my_rating|default:0 }};
+        const angle = (rating / 10) * 360;
+        ratingFill.style.transform = `rotate(${angle}deg)`;
+        
+        // Set color based on rating
+        if (rating >= 8) {
+            ratingFill.classList.add('high');
+        } else if (rating >= 5) {
+            ratingFill.classList.add('medium');
+        } else {
+            ratingFill.classList.add('low');
+        }
+    }
+});
+</script>
+{% endblock %}

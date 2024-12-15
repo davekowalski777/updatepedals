@@ -1,0 +1,208 @@
+{% extends 'base.html' %}
+
+{% block title %} - Home{% endblock %}
+
+{% block meta_description %}
+<meta name="description" content="Discover and learn about the best guitar pedals from an experienced guitarist's perspective. Join our community to rate, review, and discuss your favorite pedals.">
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .hero-section {
+        text-align: center;
+        padding: 3rem 2rem;
+    }
+    
+    .hero-icon {
+        width: 120px;
+        height: 120px;
+        margin: 0 auto 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #007bff 0%, #4a90e2 100%);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .hero-buttons {
+        max-width: 300px;
+        margin: 2rem auto 0;
+    }
+    
+    .hero-buttons .btn {
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+    
+    .hero-buttons .btn:last-child {
+        margin-bottom: 0;
+    }
+    
+    @media (max-width: 768px) {
+        .hero-section {
+            padding: 2rem 1rem;
+        }
+        
+        .hero-title {
+            font-size: 2rem;
+            line-height: 1.2;
+        }
+        
+        .hero-lead {
+            font-size: 1.1rem;
+        }
+        
+        .hero-icon {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 1.5rem;
+        }
+        
+        .hero-icon i {
+            font-size: 2.5rem !important;
+        }
+    }
+    
+    .feature-card {
+        padding: 2rem;
+        height: 100%;
+        transition: transform 0.2s;
+        background: white;
+        border-radius: 0.5rem;
+    }
+    
+    .feature-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .feature-icon {
+        width: 80px;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        margin: 0 auto 1.5rem;
+        background-color: var(--bs-light);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Hero Section -->
+    <div class="hero-section bg-light rounded shadow-sm">
+        <div class="hero-icon">
+            <i class="fas fa-guitar fa-3x text-white"></i>
+        </div>
+        <h1 class="display-4 hero-title">Welcome to Guitar Pedal Database</h1>
+        <p class="lead hero-lead">Discover and learn about the best guitar pedals from an experienced guitarist's perspective.</p>
+        <hr class="my-4">
+        <p class="fs-5">Join our community of guitarists to explore, rate, and discuss your favorite pedals. Share your experiences and help others find their perfect tone!</p>
+        <div class="hero-buttons">
+            <a class="btn btn-primary btn-lg" href="{% url 'pedals:pedal_list' %}" role="button">
+                <i class="fas fa-search me-2"></i>Browse Pedals
+            </a>
+            <a class="btn btn-outline-primary btn-lg" href="{% url 'pedals:what_are_guitar_pedals' %}" role="button">
+                <i class="fas fa-book me-2"></i>Learn More
+            </a>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="row mt-5 mb-5 g-4">
+        <div class="col-md-4">
+            <div class="feature-card shadow-sm">
+                <div class="feature-icon">
+                    <i class="fas fa-star-half-alt fa-2x text-primary"></i>
+                </div>
+                <h3 class="h4 mb-3">Rate & Review</h3>
+                <p class="mb-0">Share your experience with different pedals and help other guitarists make informed decisions. Rate pedals and leave detailed feedback about your experience.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="feature-card shadow-sm">
+                <div class="feature-icon">
+                    <i class="fas fa-comments fa-2x text-primary"></i>
+                </div>
+                <h3 class="h4 mb-3">Community Insights</h3>
+                <p class="mb-0">Read real reviews from fellow guitarists. Get authentic feedback about pedals' performance, build quality, and value for money.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="feature-card shadow-sm">
+                <div class="feature-icon">
+                    <i class="fas fa-graduation-cap fa-2x text-primary"></i>
+                </div>
+                <h3 class="h4 mb-3">Expert Guidance</h3>
+                <p class="mb-0">Access detailed guides and tips from experienced guitarists. Learn how to choose, use, and combine pedals for your perfect tone.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Featured Pedals Section -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <h2 class="h3 mb-4">
+                <i class="fas fa-fire text-danger me-2"></i>Featured Pedals
+            </h2>
+        </div>
+        {% for pedal in featured_pedals %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                {% if pedal.image_url %}
+                    <img src="{{ pedal.image_url }}" 
+                         class="card-img-top" 
+                         alt="{{ pedal.name }}"
+                         loading="lazy"
+                         style="height: 200px; object-fit: contain; padding: 1rem;">
+                {% else %}
+                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                        <i class="fas fa-guitar fa-3x text-secondary"></i>
+                    </div>
+                {% endif %}
+                <div class="card-body">
+                    <h3 class="h5 card-title">{{ pedal.name }}</h3>
+                    <h4 class="h6 card-subtitle mb-2 text-muted">
+                        <i class="fas fa-industry me-1"></i>{{ pedal.manufacturer.name }}
+                    </h4>
+                    <p class="card-text">
+                        <span class="badge bg-primary">
+                            <i class="fas fa-tag me-1"></i>{{ pedal.pedal_type.name }}
+                        </span>
+                        {% if pedal.price %}
+                        <span class="badge bg-success ms-1">
+                            <i class="fas fa-dollar-sign me-1"></i>{{ pedal.price }}
+                        </span>
+                        {% endif %}
+                    </p>
+                    <p class="card-text">{{ pedal.what_makes_it_good|truncatewords:30 }}</p>
+                    <div class="d-grid">
+                        <a href="{% url 'pedals:pedal_detail' pedal.slug %}" class="btn btn-outline-primary">
+                            <i class="fas fa-info-circle me-1"></i>View Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Call to Action -->
+    <div class="text-center py-5 mt-4">
+        <div class="p-4 p-md-5 bg-light rounded shadow-sm">
+            <h3 class="mb-4">Join Our Guitar Pedal Community</h3>
+            <p class="lead mb-4">Share your experiences, rate pedals, and help fellow guitarists find their perfect tone!</p>
+            <div class="d-grid gap-3 d-md-flex justify-content-center">
+                <a href="{% url 'pedals:pedal_list' %}" class="btn btn-lg btn-primary">
+                    <i class="fas fa-guitar me-2"></i>Explore All Pedals
+                </a>
+                <a href="{% url 'pedals:contact' %}" class="btn btn-lg btn-outline-primary">
+                    <i class="fas fa-envelope me-2"></i>Contact Us
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

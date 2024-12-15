@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %} - Privacy Policy{% endblock %}
+
+{% block content %}
+<div class="container mt-4 mb-5">
+    <h1 class="mb-4">Privacy Policy</h1>
+    
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h2 class="h4 mb-3">Information We Collect</h2>
+            <p>When you submit a review on our website, we collect the following information:</p>
+            <ul>
+                <li>Your name (as provided in the review form)</li>
+                <li>Your email address (not displayed publicly)</li>
+                <li>Your review content and rating</li>
+            </ul>
+
+            <h2 class="h4 mb-3 mt-4">How We Use Your Information</h2>
+            <p>We use the information you provide to:</p>
+            <ul>
+                <li>Display your review on our website</li>
+                <li>Contact you about your review if necessary</li>
+                <li>Improve our website and services</li>
+            </ul>
+
+            <h2 class="h4 mb-3 mt-4">Information Sharing</h2>
+            <p>We do not sell or share your personal information with third parties. Your email address is kept private and is only used for administrative purposes.</p>
+
+            <h2 class="h4 mb-3 mt-4">Cookies</h2>
+            <p>We use cookies to improve your browsing experience and to remember your preferences. You can control cookies through your browser settings.</p>
+
+            <h2 class="h4 mb-3 mt-4">Contact Us</h2>
+            <p>If you have any questions about this Privacy Policy, please contact us.</p>
+
+            <div class="mt-4">
+                <p class="text-muted"><small>Last updated: {% now "F j, Y" %}</small></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+
+{% block title %} - How to Choose Guitar Pedals{% endblock %}
+
+{% block extra_css %}
+<style>
+    .video-container {
+        position: relative;
+        padding-bottom: 56.25%; /* 16:9 aspect ratio */
+        height: 0;
+        margin: 1.5rem 0;
+        border-radius: 0.5rem;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .video-container iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4 mb-5">
+    <h1 class="mb-4">How to Choose Guitar Pedals</h1>
+    
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-8">
+                    <p class="lead">Choosing the right guitar pedals can be overwhelming with so many options available. Here's a comprehensive guide to help you make informed decisions about building your pedalboard.</p>
+
+                    <!-- Video Section -->
+                    <div class="video-container mb-4">
+                        <iframe src="https://www.youtube.com/embed/VfYM-wWJNWw" 
+                                title="How to Choose Guitar Pedals" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen>
+                        </iframe>
+                    </div>
+
+                    <h2 class="h4 mt-4 mb-3">1. Define Your Goals</h2>
+                    <p>Before buying any pedals, ask yourself:</p>
+                    <ul>
+                        <li>What style of music do you play most often?</li>
+                        <li>Which guitarists' tones do you want to emulate?</li>
+                        <li>Are you playing live or just practicing at home?</li>
+                        <li>What's your budget?</li>
+                    </ul>
+
+                    <h2 class="h4 mt-4 mb-3">2. Understand Your Current Setup</h2>
+                    <p>Your existing gear affects how pedals will sound:</p>
+                    <ul>
+                        <li>Guitar type (single-coil vs. humbucker pickups)</li>
+                        <li>Amplifier type (tube vs. solid-state)</li>
+                        <li>Current effects you're using</li>
+                    </ul>
+
+                    <h2 class="h4 mt-4 mb-3">3. Start with the Essentials</h2>
+                    <div class="mb-4">
+                        <h3 class="h5 mb-2">Priority 1: Tone Shapers</h3>
+                        <ul>
+                            <li>Tuner pedal</li>
+                            <li>Overdrive or distortion</li>
+                            <li>Compression (especially for clean playing)</li>
+                        </ul>
+                    </div>
+
+                    <div class="mb-4">
+                        <h3 class="h5 mb-2">Priority 2: Time-Based Effects</h3>
+                        <ul>
+                            <li>Reverb (if your amp doesn't have it)</li>
+                            <li>Delay for solos and atmosphere</li>
+                        </ul>
+                    </div>
+
+                    <div class="mb-4">
+                        <h3 class="h5 mb-2">Priority 3: Modulation</h3>
+                        <ul>
+                            <li>Chorus for clean tones</li>
+                            <li>Phaser or flanger for specific songs</li>
+                        </ul>
+                    </div>
+
+                    <h2 class="h4 mt-4 mb-3">4. Consider Your Budget</h2>
+                    <p>Smart ways to build your pedalboard:</p>
+                    <ul>
+                        <li>Start with one high-quality versatile pedal</li>
+                        <li>Consider multi-effects pedals for beginners</li>
+                        <li>Look for used pedals from reputable sellers</li>
+                        <li>Buy pedals that complement each other</li>
+                    </ul>
+
+                    <h2 class="h4 mt-4 mb-3">5. Research and Test</h2>
+                    <p>Before making a purchase:</p>
+                    <ul>
+                        <li>Watch demo videos online</li>
+                        <li>Try pedals at local music stores</li>
+                        <li>Read user reviews and professional reviews</li>
+                        <li>Ask other guitarists for recommendations</li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card bg-light mb-4">
+                        <div class="card-body">
+                            <h3 class="h5 mb-3">Buying Tips</h3>
+                            <ul class="list-unstyled">
+                                <li class="mb-3">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    Buy from authorized dealers
+                                </li>
+                                <li class="mb-3">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    Check return policies
+                                </li>
+                                <li class="mb-3">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    Compare prices across stores
+                                </li>
+                                <li class="mb-3">
+                                    <i class="fas fa-check-circle text-success me-2"></i>
+                                    Consider warranty coverage
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card bg-light">
+                        <div class="card-body">
+                            <h3 class="h5 mb-3">Common Mistakes to Avoid</h3>
+                            <ul class="list-unstyled">
+                                <li class="mb-3">
+                                    <i class="fas fa-times-circle text-danger me-2"></i>
+                                    Buying too many pedals at once
+                                </li>
+                                <li class="mb-3">
+                                    <i class="fas fa-times-circle text-danger me-2"></i>
+                                    Ignoring power supply needs
+                                </li>
+                                <li class="mb-3">
+                                    <i class="fas fa-times-circle text-danger me-2"></i>
+                                    Skipping research phase
+                                </li>
+                                <li class="mb-3">
+                                    <i class="fas fa-times-circle text-danger me-2"></i>
+                                    Choosing based only on price
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

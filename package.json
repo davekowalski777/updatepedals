@@ -1,0 +1,12 @@
+{
+  "name": "guitar-pedals",
+  "version": "1.0.0",
+  "description": "Guitar Pedals Application",
+  "scripts": {
+    "build:css": "tailwindcss -i ./static/src/input.css -o ./static/css/output.css --minify"
+  },
+  "dependencies": {
+    "tailwindcss": "^3.3.5",
+    "@vercel/node": "^3.0.0"
+  }
+}

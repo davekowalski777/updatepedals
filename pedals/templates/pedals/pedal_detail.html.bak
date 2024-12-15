@@ -1,0 +1,260 @@
+{% extends 'base.html' %}
+
+{% block title %} - {{ pedal.get_formatted_title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'pedals:pedal_list' %}">Pedals</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ pedal.name }}</li>
+        </ol>
+    </nav>
+
+    <h1 class="mb-4">{{ pedal.get_formatted_title }}</h1>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card shadow-sm mb-4">
+                {% if pedal.image_url %}
+                    <img src="{{ pedal.image_url }}" class="card-img-top p-4" alt="{{ pedal.name }}" style="object-fit: contain; height: 400px;">
+                {% else %}
+                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 400px;">
+                        <i class="fas fa-guitar fa-5x text-secondary"></i>
+                    </div>
+                {% endif %}
+            </div>
+            <h2 class="mb-3">{{ pedal.manufacturer.name }} {{ pedal.name }}</h2>
+            
+            {% if pedal.affiliate_link %}
+                <a href="{{ pedal.affiliate_link }}" class="btn btn-primary btn-lg w-100 mb-4" target="_blank">
+                    <i class="fas fa-shopping-cart"></i> Buy Now
+                </a>
+            {% endif %}
+
+            <!-- YouTube Demo Button -->
+            <div class="mb-4">
+                <a href="{{ pedal.get_youtube_search_url }}" target="_blank" class="btn btn-danger btn-lg w-100">
+                    <i class="fab fa-youtube me-2"></i>Watch Demo (YouTube)
+                </a>
+            </div>
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <div class="d-flex gap-2 mb-3">
+                        <span class="badge bg-primary">{{ pedal.pedal_type.name }}</span>
+                        {% if pedal.my_rating %}
+                            <span class="badge bg-warning text-dark">
+                                Dave's Rating: {{ pedal.my_rating }}/5
+                            </span>
+                        {% endif %}
+                        {% if pedal.price %}
+                            <span class="badge bg-success">${{ pedal.price }}</span>
+                        {% endif %}
+                    </div>
+
+                    <!-- User Rating Section -->
+                    <div class="mb-4">
+                        <h5>User Rating</h5>
+                        <div class="star-rating" data-pedal-id="{{ pedal.id }}">
+                            <span class="star" data-rating="1">★</span>
+                            <span class="star" data-rating="2">★</span>
+                            <span class="star" data-rating="3">★</span>
+                            <span class="star" data-rating="4">★</span>
+                            <span class="star" data-rating="5">★</span>
+                        </div>
+                        <small class="text-muted">Average rating: <span id="average-rating">{{ average_user_rating|default:0 }}</span>/5</small>
+                        {% if user_rating %}
+                            <br>
+                            <small class="text-muted">Your rating: <span id="user-rating">{{ user_rating }}</span>/5</small>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <!-- Author Bio Card -->
+            {% if pedal.author %}
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h4 class="card-title mb-3">
+                        <i class="fas fa-user text-primary"></i> About the Reviewer
+                    </h4>
+                    <div class="d-flex align-items-center mb-3">
+                        {% if pedal.author.profile_image %}
+                            <img src="{{ pedal.author.profile_image }}" alt="{{ pedal.author.name }}" class="rounded-circle me-3" style="width: 64px; height: 64px; object-fit: cover;">
+                        {% else %}
+                            <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-3" style="width: 64px; height: 64px;">
+                                <i class="fas fa-user fa-2x"></i>
+                            </div>
+                        {% endif %}
+                        <div>
+                            <h5 class="card-title mb-1">{{ pedal.author.name }}</h5>
+                            <p class="card-text text-muted mb-0">{{ pedal.author.years_of_experience }} Years of Guitar Experience</p>
+                        </div>
+                    </div>
+                    <p class="card-text">{{ pedal.author.bio }}</p>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- What Makes It Good -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <i class="fas fa-thumbs-up text-success"></i> What Makes It Good
+                    </h4>
+                    <div class="card-text">{{ pedal.what_makes_it_good|linebreaks }}</div>
+                </div>
+            </div>
+
+            <!-- Best For -->
+            {% if pedal.best_for %}
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <i class="fas fa-bullseye text-danger"></i> Best For
+                    </h4>
+                    <div class="card-text">{{ pedal.best_for|linebreaks }}</div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- My Experience -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <i class="fas fa-comment text-info"></i> My Experience
+                    </h4>
+                    <div class="card-text">{{ pedal.my_experience|linebreaks }}</div>
+                </div>
+            </div>
+
+            <!-- About the Brand -->
+            {% if pedal.manufacturer.about %}
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <i class="fas fa-building text-secondary"></i> About {{ pedal.manufacturer.name }}
+                    </h4>
+                    <div class="card-text">{{ pedal.manufacturer.about|linebreaks }}</div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const starRating = document.querySelector('.star-rating');
+    const stars = starRating.querySelectorAll('.star');
+    const userRating = {{ user_rating|default:0 }};
+    const averageRating = {{ average_user_rating|default:0 }};
+
+    // Initialize stars
+    updateStars(userRating);
+    
+    // Add hover effects
+    stars.forEach(star => {
+        star.addEventListener('mouseover', function() {
+            const rating = this.dataset.rating;
+            highlightStars(rating);
+        });
+
+        star.addEventListener('mouseout', function() {
+            updateStars(userRating);
+        });
+
+        star.addEventListener('click', function() {
+            const rating = this.dataset.rating;
+            submitRating(rating);
+        });
+    });
+
+    function highlightStars(rating) {
+        stars.forEach(star => {
+            star.classList.toggle('active', star.dataset.rating <= rating);
+        });
+    }
+
+    function updateStars(rating) {
+        stars.forEach(star => {
+            star.classList.toggle('active', star.dataset.rating <= rating);
+        });
+    }
+
+    function submitRating(rating) {
+        const pedalSlug = '{{ pedal.slug }}';
+        fetch(`/pedal/${pedalSlug}/rate/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                'rating': rating
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById('average-rating').textContent = data.average_rating;
+                const userRatingSpan = document.getElementById('user-rating');
+                if (!userRatingSpan) {
+                    // Create user rating display if it doesn't exist
+                    const container = document.querySelector('.star-rating').parentNode;
+                    const newRating = document.createElement('br');
+                    const newText = document.createElement('small');
+                    newText.className = 'text-muted';
+                    newText.innerHTML = 'Your rating: <span id="user-rating">' + data.user_rating + '</span>/5';
+                    container.appendChild(newRating);
+                    container.appendChild(newText);
+                } else {
+                    userRatingSpan.textContent = data.user_rating;
+                }
+
+                updateStars(data.user_rating);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    // Function to get CSRF token from cookies
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+});
+</script>
+
+<style>
+.star-rating {
+    font-size: 24px;
+    cursor: pointer;
+}
+.star-rating .star {
+    color: #ddd;
+    transition: color 0.2s;
+}
+.star-rating .star.active {
+    color: #ffd700;
+}
+.star-rating .star:hover {
+    color: #ffed4a;
+}
+</style>
+{% endblock %}

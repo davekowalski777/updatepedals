@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+
+{% block title %} - The Right Guitar Pedal Chain{% endblock %}
+
+{% block extra_css %}
+<style>
+    .video-container {
+        position: relative;
+        padding-bottom: 56.25%; /* 16:9 aspect ratio */
+        height: 0;
+        margin: 1.5rem 0;
+        border-radius: 0.5rem;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .video-container iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4 mb-5">
+    <h1 class="mb-4">The Right Guitar Pedal Chain</h1>
+    
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-8">
+                    <p class="lead">The order of your pedals (your signal chain) can dramatically affect your overall tone. Here's a comprehensive guide to creating the perfect pedal chain.</p>
+
+                    <!-- Video Section -->
+                    <div class="video-container mb-4">
+                        <iframe src="https://www.youtube.com/embed/S_M0fkFisKo" 
+                                title="Guitar Pedal Chain Guide" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen>
+                        </iframe>
+                    </div>
+
+                    <h2 class="h4 mt-4 mb-3">The Standard Pedal Order</h2>
+                    <p>While there's room for experimentation, here's the traditional order that works for most situations:</p>
+                    
+                    <div class="mb-4">
+                        <h3 class="h5 mb-2">1. Tuner</h3>
+                        <p>Place your tuner first to get the cleanest signal for accurate tuning. It should also have a bypass feature to mute your signal when tuning.</p>
+                    </div>
+
+                    <div class="mb-4">
+                        <h3 class="h5 mb-2">2. Dynamics/Filters</h3>
+                        <ul>
+                            <li>Wah pedal</li>
+                            <li>Compressor</li>
+                            <li>EQ</li>
+                            <li>Volume pedal (can also go last)</li>
+                        </ul>
+                    </div>
+
+                    <div class="mb-4">
+                        <h3 class="h5 mb-2">3. Gain Stages</h3>
+                        <ul>
+                            <li>Overdrive</li>
+                            <li>Distortion</li>
+                            <li>Fuzz</li>
+                        </ul>
+                        <p class="text-muted"><small>Tip: Arrange from lowest to highest gain for the most versatile sound options.</small></p>
+                    </div>
+
+                    <div class="mb-4">
+                        <h3 class="h5 mb-2">4. Modulation</h3>
+                        <ul>
+                            <li>Chorus</li>
+                            <li>Flanger</li>
+                            <li>Phaser</li>
+                            <li>Tremolo</li>
+                        </ul>
+                    </div>
+
+                    <div class="mb-4">
+                        <h3 class="h5 mb-2">5. Time-Based Effects</h3>
+                        <ul>
+                            <li>Delay</li>
+                            <li>Reverb</li>
+                        </ul>
+                        <p class="text-muted"><small>Tip: Reverb usually goes last to create a natural space for all other effects.</small></p>
+                    </div>
+
+                    <h2 class="h4 mt-4 mb-3">Signal Chain Considerations</h2>
+                    <ul>
+                        <li>Buffer placement (start and end of chain)</li>
+                        <li>Cable length and quality</li>
+                        <li>Power supply isolation</li>
+                        <li>True bypass vs. buffered bypass</li>
+                    </ul>
+
+                    <h2 class="h4 mt-4 mb-3">Common Variations</h2>
+                    <ul>
+                        <li>Volume pedal can go before or after drive pedals</li>
+                        <li>Wah can go after drive for a different character</li>
+                        <li>Some players prefer modulation before drive</li>
+                        <li>Parallel effects loops for more complex setups</li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card bg-light mb-4">
+                        <div class="card-body">
+                            <h3 class="h5 mb-3">Signal Chain Tips</h3>
+                            <ul class="list-unstyled">
+                                <li class="mb-3">
+                                    <i class="fas fa-lightbulb text-warning me-2"></i>
+                                    Keep cable runs short
+                                </li>
+                                <li class="mb-3">
+                                    <i class="fas fa-lightbulb text-warning me-2"></i>
+                                    Use isolated power supplies
+                                </li>
+                                <li class="mb-3">
+                                    <i class="fas fa-lightbulb text-warning me-2"></i>
+                                    Consider stereo effects last
+                                </li>
+                                <li class="mb-3">
+                                    <i class="fas fa-lightbulb text-warning me-2"></i>
+                                    Test different combinations
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card bg-light">
+                        <div class="card-body">
+                            <h3 class="h5 mb-3">Troubleshooting</h3>
+                            <ul class="list-unstyled">
+                                <li class="mb-3">
+                                    <i class="fas fa-exclamation-triangle text-danger me-2"></i>
+                                    Signal loss: Check cables and buffers
+                                </li>
+                                <li class="mb-3">
+                                    <i class="fas fa-exclamation-triangle text-danger me-2"></i>
+                                    Noise: Check power supplies
+                                </li>
+                                <li class="mb-3">
+                                    <i class="fas fa-exclamation-triangle text-danger me-2"></i>
+                                    Tone loss: Consider buffer placement
+                                </li>
+                                <li class="mb-3">
+                                    <i class="fas fa-exclamation-triangle text-danger me-2"></i>
+                                    Ground loops: Use isolated power
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

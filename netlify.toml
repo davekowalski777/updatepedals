@@ -1,0 +1,37 @@
+[build]
+command = """
+# Install npm dependencies and build CSS
+npm install &&
+npm run build:css &&
+
+# Create necessary directories
+mkdir -p /opt/build/repo/staticfiles &&
+mkdir -p /opt/build/repo/functions/django &&
+
+# Copy project files to functions directory (excluding functions dir)
+cp -r guitar_pedals pedals static manage.py requirements.txt package.json tailwind.config.js db.sqlite3 /opt/build/repo/functions/django/ &&
+
+# Copy static files
+cp -r static/* /opt/build/repo/staticfiles/ &&
+
+# Install Python requirements
+pip install -r requirements.txt
+"""
+publish = "staticfiles"
+
+[build.environment]
+PYTHON_VERSION = "3.9"
+NODE_VERSION = "16"
+
+[[redirects]]
+from = "/*"
+to = "/.netlify/functions/django/:splat"
+status = 200
+force = true
+
+[functions]
+directory = "functions"
+node_bundler = "esbuild"
+
+[build.processing]
+skip_processing = false

@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Sitemap: {{ request.scheme }}://{{ request.get_host }}/sitemap.xml
+
+# Allow all bots to access everything
+Disallow: /admin/
+Disallow: /private/
+Disallow: /*.php$

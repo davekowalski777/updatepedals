@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} - Manufacturers{% endblock %}
+
+{% block meta_description %}
+<meta name="description" content="Browse our comprehensive list of guitar pedal manufacturers. Find detailed information about each brand and explore their pedal collections.">
+{% endblock %}
+
+{% block extra_css %}
+<link href="{% static 'css/manufacturer.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="display-4 mb-3">Guitar Pedal Manufacturers</h1>
+            <p class="lead text-muted">Discover the world's finest guitar pedal brands and their unique offerings.</p>
+        </div>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for manufacturer in manufacturers %}
+        <div class="col">
+            <div class="card manufacturer-card shadow-sm h-100">
+                <div class="card-body text-center">
+                    <div class="brand-icon">
+                        {% if manufacturer.name|lower == "boss" %}
+                            <i class="fas fa-square text-warning manufacturer-icon"></i>
+                        {% elif manufacturer.name|lower == "electro-harmonix" %}
+                            <i class="fas fa-bolt text-danger manufacturer-icon"></i>
+                        {% elif manufacturer.name|lower == "strymon" %}
+                            <i class="fas fa-star text-info manufacturer-icon"></i>
+                        {% elif manufacturer.name|lower == "mxr" %}
+                            <i class="fas fa-cube text-success manufacturer-icon"></i>
+                        {% elif manufacturer.name|lower == "tc electronic" %}
+                            <i class="fas fa-wave-square text-primary manufacturer-icon"></i>
+                        {% else %}
+                            <i class="fas fa-guitar text-secondary manufacturer-icon"></i>
+                        {% endif %}
+                    </div>
+                    
+                    <h2 class="h4 card-title mb-2">{{ manufacturer.name }}</h2>
+                    
+                    <div class="manufacturer-stats">
+                        <span class="pedal-count">
+                            <i class="fas fa-box-open me-1"></i>
+                            {{ manufacturer.pedals.count }} Pedals
+                        </span>
+                    </div>
+
+                    {% if manufacturer.about %}
+                        <p class="manufacturer-description">{{ manufacturer.about|truncatewords:25 }}</p>
+                    {% endif %}
+
+                    {% if manufacturer.website %}
+                        <a href="{{ manufacturer.website }}" class="website-link d-block mb-3" target="_blank" rel="noopener">
+                            <i class="fas fa-external-link-alt me-1"></i>
+                            Visit Website
+                        </a>
+                    {% endif %}
+
+                    <a href="{% url 'pedals:pedal_list' %}?manufacturer={{ manufacturer.id }}" 
+                       class="btn btn-primary">
+                        <i class="fas fa-search me-1"></i>
+                        Browse Pedals
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info text-center">
+                <i class="fas fa-info-circle me-2"></i>
+                No manufacturers found in the database.
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

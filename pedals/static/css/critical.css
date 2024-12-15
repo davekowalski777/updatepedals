@@ -1,0 +1,77 @@
+/* Critical CSS for Guitar Pedal DB */
+:root {
+    --primary-color: #212529;
+    --secondary-color: #6c757d;
+    --light-bg: #f8f9fa;
+    --border-color: #dee2e6;
+}
+
+/* Base layout */
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+/* Card optimizations */
+.card {
+    content-visibility: auto;
+    contain-intrinsic-size: 0 500px;
+    transition: transform 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+}
+
+.card-img-top {
+    height: 200px;
+    object-fit: contain;
+    padding: 1rem;
+}
+
+/* Footer styles */
+.footer {
+    margin-top: auto;
+    padding: 2rem 0;
+    background-color: var(--light-bg);
+    border-top: 1px solid var(--border-color);
+}
+
+.footer-links a {
+    margin-left: 1.5rem;
+    color: var(--secondary-color);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.footer-links a:hover {
+    color: var(--primary-color);
+}
+
+@media (max-width: 767.98px) {
+    .footer-links a {
+        margin-left: 0;
+        margin-right: 1.5rem;
+    }
+}
+
+/* Font optimizations */
+@font-face {
+    font-family: 'Font Awesome 6 Free';
+    font-display: swap;
+}
+
+/* Loading optimizations */
+.lazy-image {
+    opacity: 0;
+    transition: opacity 0.3s ease-in;
+}
+
+.lazy-image.loaded {
+    opacity: 1;
+}

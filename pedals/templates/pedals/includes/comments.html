@@ -1,0 +1,178 @@
+<!-- Comments Section -->
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h3 class="card-title mb-4">
+            <i class="fas fa-star text-warning"></i> Add Your Review
+        </h3>
+
+        <!-- Review Form -->
+        <form id="comment-form" method="post" class="mb-4">
+            {% csrf_token %}
+            {{ comment_form.rating }}
+            <div class="mb-3">
+                <label class="form-label">Your Rating</label>
+                <div class="star-rating-input mb-2">
+                    <span class="star" data-rating="1">★</span>
+                    <span class="star" data-rating="2">★</span>
+                    <span class="star" data-rating="3">★</span>
+                    <span class="star" data-rating="4">★</span>
+                    <span class="star" data-rating="5">★</span>
+                </div>
+            </div>
+            <div class="mb-3">
+                {{ comment_form.author_name }}
+                <div class="invalid-feedback" id="author_name-error"></div>
+            </div>
+            <div class="mb-3">
+                {{ comment_form.email }}
+                <div class="invalid-feedback" id="email-error"></div>
+            </div>
+            <div class="mb-3">
+                {{ comment_form.content }}
+                <div class="invalid-feedback" id="content-error"></div>
+            </div>
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-paper-plane"></i> Submit Review
+            </button>
+        </form>
+
+        <!-- Reviews List -->
+        <div id="comments-list">
+            <h4 class="mb-3">User Reviews</h4>
+            {% for comment in comments %}
+                <div class="comment mb-3 p-3 bg-light rounded">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div>
+                            <h5 class="mb-0">{{ comment.author_name }}</h5>
+                            <div class="text-warning">{{ comment.stars }}</div>
+                        </div>
+                        <small class="text-muted">{{ comment.created_at|date:"F j, Y" }}</small>
+                    </div>
+                    <p class="mb-0">{{ comment.content }}</p>
+                </div>
+            {% empty %}
+                <p class="text-muted">No reviews yet. Be the first to review!</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<style>
+.star-rating-input {
+    font-size: 24px;
+    cursor: pointer;
+    display: inline-block;
+}
+.star-rating-input .star {
+    color: #ddd;
+    transition: color 0.2s;
+    cursor: pointer;
+    user-select: none;
+    display: inline-block;
+    margin-right: 2px;
+}
+.star-rating-input .star.active {
+    color: #ffd700;
+}
+.star-rating-input .star:hover {
+    color: #ffed4a;
+}
+</style>
+
+<script>
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('comment-form');
+    const csrftoken = getCookie('csrftoken');
+    const ratingInput = form.querySelector('input[name="rating"]');
+    const starContainer = form.querySelector('.star-rating-input');
+    const stars = starContainer.querySelectorAll('.star');
+    
+    // Initialize rating input
+    function updateStars(rating) {
+        stars.forEach(star => {
+            const starRating = parseInt(star.dataset.rating);
+            star.classList.toggle('active', starRating <= rating);
+        });
+        ratingInput.value = rating;
+    }
+
+    // Set initial rating
+    updateStars(5);
+
+    // Add click events to stars
+    stars.forEach(star => {
+        star.addEventListener('click', function(e) {
+            e.preventDefault();
+            const rating = parseInt(this.dataset.rating);
+            updateStars(rating);
+        });
+
+        star.addEventListener('mouseover', function() {
+            const rating = parseInt(this.dataset.rating);
+            stars.forEach(s => {
+                const starRating = parseInt(s.dataset.rating);
+                s.classList.toggle('active', starRating <= rating);
+            });
+        });
+
+        star.addEventListener('mouseout', function() {
+            const currentRating = parseInt(ratingInput.value);
+            stars.forEach(s => {
+                const starRating = parseInt(s.dataset.rating);
+                s.classList.toggle('active', starRating <= currentRating);
+            });
+        });
+    });
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Clear previous error messages
+        document.querySelectorAll('.invalid-feedback').forEach(el => el.textContent = '');
+        document.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+
+        fetch(window.location.pathname, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrftoken,
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams(new FormData(form))
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                alert(data.message);
+                form.reset();
+                updateStars(5);
+            } else if (data.errors) {
+                Object.keys(data.errors).forEach(field => {
+                    const input = form.querySelector(`[name="${field}"]`);
+                    const errorDiv = document.getElementById(`${field}-error`);
+                    if (input && errorDiv) {
+                        input.classList.add('is-invalid');
+                        errorDiv.textContent = data.errors[field].join(' ');
+                    }
+                });
+            }
+        })
+        .catch(error => {
+            alert('An error occurred while submitting your review. Please try again.');
+        });
+    });
+});</script>

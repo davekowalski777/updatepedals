@@ -1,0 +1,45 @@
+# Global rules
+User-agent: *
+Allow: /
+Allow: /pedal/
+Allow: /manufacturer/
+Allow: /guides/
+Allow: /about/
+Allow: /privacy-policy/
+Allow: /pedals/?page=
+
+# Prevent access to admin and private areas
+Disallow: /admin/
+Disallow: /private/
+Disallow: /accounts/
+Disallow: /login/
+Disallow: /register/
+Disallow: /*.php$
+Disallow: /*/feed/
+Disallow: /*/trackback/
+Disallow: /cgi-bin/
+
+# Prevent duplicate content indexing
+Disallow: /page/*
+Disallow: /tag/
+Disallow: /category/
+
+# Allow major search engine bots with specific rules
+User-agent: Googlebot
+Allow: /
+Allow: /*.js
+Allow: /*.css
+Allow: /*.png
+Allow: /*.jpg
+Allow: /*.gif
+
+User-agent: Bingbot
+Allow: /
+Allow: /*.js
+Allow: /*.css
+Allow: /*.png
+Allow: /*.jpg
+Allow: /*.gif
+
+# Sitemap location
+Sitemap: https://guitarpedaldb.com/sitemap.xml
